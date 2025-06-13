@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Doctor Dashboard</h2>
+<p>Welcome Dr. {{ profile.user.username }}</p>
+<ul>
+{% for p in patients %}
+  <li>{{ p.user.username }} - {{ p.surgery_type }}</li>
+{% endfor %}
+</ul>
+{% endblock %}

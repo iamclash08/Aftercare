@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Patient Dashboard</h2>
+<p>Welcome {{ profile.user.username }}</p>
+<a href="{% url 'checklist_view' %}">Add Checklist</a><br>
+<a href="{% url 'symptom_log_view' %}">Log Symptom</a>
+
+<h3>Daily Tasks:</h3>
+<ul>
+{% for task in tasks %}
+  <li>{{ task.date }} - Meds: {{ task.medication_taken }} Walked: {{ task.walked }} Water: {{ task.water_intake }}</li>
+{% endfor %}
+</ul>
+
+<h3>Symptoms:</h3>
+<ul>
+{% for sym in symptoms %}
+  <li>{{ sym.date }} - {{ sym.symptom }} ({{ sym.severity }}/10)</li>
+{% endfor %}
+</ul>
+{% endblock %}
