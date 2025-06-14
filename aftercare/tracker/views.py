@@ -95,3 +95,6 @@ def symptom_log_view(request):
     else:
         form = SymptomLogForm()
     return render(request, 'tracker/symptom_log.html', {'form': form})
+
+def home_view(request):
+    return render(request, 'home.html')
