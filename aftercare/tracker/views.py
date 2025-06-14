@@ -95,3 +95,58 @@ def symptom_log_view(request):
     else:
         form = SymptomLogForm()
     return render(request, 'tracker/symptom_log.html', {'form': form})
+
+@login_required
+def vital_sign_view(request):
+    patient = get_object_or_404(PatientProfile, user=request.user)
+    if request.method == 'POST':
+        form = VitalSignForm(request.POST)
+        if form.is_valid():
+            vital = form.save(commit=False)
+            vital.patient = patient
+            vital.save()
+            return redirect('patient_dashboard')
+    else:
+        form = VitalSignForm()
+    return render(request, 'tracker/vital_sign.html', {'form': form})
+
+@login_required
+def recovery_progress_view(request):
+    patient = get_object_or_404(PatientProfile, user=request.user)
+    if request.method == 'POST':
+        form = RecoveryProgressForm(request.POST)
+        if form.is_valid():
+            progress = form.save(commit=False)
+            progress.patient = patient
+            progress.save()
+            return redirect('patient_dashboard')
+    else:
+        form = RecoveryProgressForm()
+    return render(request, 'tracker/recovery_progress.html', {'form': form})
+
+@login_required
+def appointment_view(request):
+    patient = get_object_or_404(PatientProfile, user=request.user)
+    if request.method == 'POST':
+        form = AppointmentForm(request.POST)
+        if form.is_valid():
+            appointment = form.save(commit=False)
+            appointment.patient = patient
+            appointment.save()
+            return redirect('patient_dashboard')
+    else:
+        form = AppointmentForm()
+    return render(request, 'tracker/appointment.html', {'form': form})
+
+@login_required
+def message_view(request):
+    if request.method == 'POST':
+        form = MessageForm(request.POST)
+        if form.is_valid():
+            message = form.save(commit=False)
+            message.sender = request.user
+            message.save()
+            return redirect('patient_dashboard')
+    else:
+        form = MessageForm()
+    return render(request, 'tracker/message.html', {'form': form})
