@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+
+{% block content %}
+<style>
+    .login-container {
+        max-width: 420px;
+        margin: 50px auto;
+        padding: 40px;
+        background: linear-gradient(135deg, #e0f7fa, #e8f5e9); /* blue + green */
+        border-radius: 16px;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+        font-family: 'Segoe UI', sans-serif;
+    }
+
+    .login-title {
+        text-align: center;
+        font-size: 28px;
+        font-weight: bold;
+        color: #00796b;
+        margin-bottom: 10px;
+    }
+
+    .login-subtitle {
+        text-align: center;
+        color: #004d40;
+        font-size: 14px;
+        margin-bottom: 25px;
+    }
+
+    .login-container button {
+        background-color: #00796b;
+        color: #fff;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        width: 100%;
+        font-size: 16px;
+    }
+
+    .login-container button:hover {
+        background-color: #004d40;
+    }
+
+    .register-link {
+        text-align: center;
+        margin-top: 20px;
+        font-size: 14px;
+    }
+
+    .register-link a {
+        color: #00796b;
+        text-decoration: none;
+    }
+
+    .register-link a:hover {
+        text-decoration: underline;
+    }
+</style>
+
+<div class="login-container">
+    <div class="login-title">Welcome to Aftercare</div>
+    <div class="login-subtitle">Track your post-surgery recovery with ease</div>
+
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Login</button>
+    </form>
+
+    <div class="register-link">
+        Don't have an account? <a href="{% url 'register' %}">Register here</a>
+    </div>
+</div>
+{% endblock %}

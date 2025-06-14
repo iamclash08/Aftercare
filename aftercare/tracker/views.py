@@ -150,3 +150,6 @@ def message_view(request):
     else:
         form = MessageForm()
     return render(request, 'tracker/message.html', {'form': form})
+
+def home_view(request):
+    return render(request, 'home.html')

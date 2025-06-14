@@ -1,5 +1,6 @@
 from django.urls import path
 from . import views
+from tracker.views import home_view
 
 urlpatterns = [
     path('register/', views.register_view, name='register'),
@@ -13,4 +14,5 @@ urlpatterns = [
     path('recovery-progress/', views.recovery_progress_view, name='recovery_progress'),
     path('appointments/', views.appointment_view, name='appointment'),
     path('messages/', views.message_view, name='message'),
+    path('', home_view, name='home'),
 ]
