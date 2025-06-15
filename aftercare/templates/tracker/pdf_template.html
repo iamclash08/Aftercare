@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Patient Daily Report</title>
+    <style>
+        body { font-family: Arial, sans-serif; font-size: 14px; }
+        h1 { text-align: center; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        td, th { padding: 8px; border: 1px solid #ccc; }
+    </style>
+</head>
+<body>
+    <h1>Daily Patient Report</h1>
+    <table>
+        <tr><th>Blood Pressure</th><td>{{ bp }}</td></tr>
+        <tr><th>Temperature</th><td>{{ temp }}</td></tr>
+        <tr><th>Oximeter</th><td>{{ oxy }}</td></tr>
+        <tr><th>Heart Rate</th><td>{{ heart }}</td></tr>
+        <tr><th>Symptoms</th><td>{{ symptoms }}</td></tr>
+        <tr><th>Checklist</th><td>
+            {% for item in checklist %}
+                ✔ {{ item }}<br>
+            {% endfor %}
+        </td></tr>
+    </table>
+</body>
+</html>

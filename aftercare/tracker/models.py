@@ -1,5 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.models import User
+from django.conf import settings
 
 class CustomUser(AbstractUser):
     ROLE_CHOICES = (
@@ -9,14 +11,18 @@ class CustomUser(AbstractUser):
     role = models.CharField(max_length=10, choices=ROLE_CHOICES)
 
 class PatientProfile(models.Model):
-    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
-    surgery_type = models.CharField(max_length=100)
-    surgery_date = models.DateField()
-    notes = models.TextField(blank=True)
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    age = models.IntegerField(null=True, blank=True)
+
+    def __str__(self):
+        return self.user.username
 
 class DoctorProfile(models.Model):
-    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
-    specialization = models.CharField(max_length=100)
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    specialty = models.CharField(max_length=100, blank=True)
+
+    def __str__(self):
+        return f"Dr. {self.user.username}"
 
 class DailyTask(models.Model):
     patient = models.ForeignKey(PatientProfile, on_delete=models.CASCADE)

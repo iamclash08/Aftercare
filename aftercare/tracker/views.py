@@ -3,6 +3,60 @@ from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from .forms import *
 from .models import *
+from django.contrib.auth.views import LoginView
+from django.contrib.auth.forms import AuthenticationForm
+
+@login_required
+def login_redirect_view(request):
+    user = request.user
+
+    if hasattr(user, 'doctorprofile'):
+        return redirect('doctor_dashboard')
+    elif hasattr(user, 'patientprofile'):
+        return redirect('patient_dashboard')
+    else:
+        return redirect('default_dashboard')  # Optional fallback
+
+def custom_login_view(request):
+    if request.method == 'POST':
+        form = AuthenticationForm(data=request.POST)
+        if form.is_valid():
+            user = form.get_user()
+            login(request, user)
+            
+            # Redirect based on role
+            if hasattr(user, 'patientprofile'):
+                return redirect('patient_dashboard')
+            elif hasattr(user, 'doctorprofile'):
+                return redirect('doctor_dashboard')
+            else:
+                return redirect('login')  # fallback
+    else:
+        form = AuthenticationForm()
+    return render(request, 'login.html', {'form': form})
+
+
+@login_required
+def home_view(request):
+    return render(request, 'home.html')
+
+def custom_login_view(request):
+    if request.method == 'POST':
+        form = AuthenticationForm(data=request.POST)
+        if form.is_valid():
+            user = form.get_user()
+            login(request, user)
+
+            # Redirect based on role
+            if hasattr(user, 'patientprofile'):
+                return redirect('patient_dashboard')
+            elif hasattr(user, 'doctorprofile'):
+                return redirect('doctor_dashboard')
+            else:
+                return redirect('login')  # fallback if no role
+    else:
+        form = AuthenticationForm()
+    return render(request, 'login.html', {'form': form}) 
 
 def register_view(request):
     if request.method == 'POST':
@@ -151,5 +205,43 @@ def message_view(request):
         form = MessageForm()
     return render(request, 'tracker/message.html', {'form': form})
 
-def home_view(request):
-    return render(request, 'home.html')
+
+from django.shortcuts import render
+from django.http import HttpResponse
+from django.template.loader import get_template
+from xhtml2pdf import pisa
+from django.core.mail import EmailMessage
+from io import BytesIO
+
+def submit_readings(request):
+    if request.method == 'POST':
+        data = {
+            'bp': request.POST.get('bp'),
+            'temp': request.POST.get('temp'),
+            'oxy': request.POST.get('oxy'),
+            'heart': request.POST.get('heart'),
+            'symptoms': request.POST.get('symptoms'),
+            'checklist': request.POST.getlist('checklist')
+        }
+
+        # Generate PDF
+        template = get_template('tracker/pdf_template.html')
+        html = template.render(data)
+        buffer = BytesIO()
+        pisa_status = pisa.CreatePDF(html, dest=buffer)
+
+        if not pisa_status.err:
+            # Email PDF
+            pdf = buffer.getvalue()
+            email = EmailMessage(
+                'Patient Daily Report',
+                'Please find attached daily report.',
+                'from@example.com',
+                ['doctor@example.com'],
+            )
+            email.attach('daily_report.pdf', pdf, 'application/pdf')
+            email.send()
+            return HttpResponse("Report sent successfully.")
+        else:
+            return HttpResponse("PDF generation error.")
+    return HttpResponse("Invalid request")

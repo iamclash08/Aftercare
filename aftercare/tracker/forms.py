@@ -12,12 +12,12 @@ class CustomUserCreationForm(UserCreationForm):
 class PatientProfileForm(forms.ModelForm):
     class Meta:
         model = PatientProfile
-        fields = ['surgery_type', 'surgery_date', 'notes']
+        fields = ['age']
 
 class DoctorProfileForm(forms.ModelForm):
     class Meta:
         model = DoctorProfile
-        fields = ['specialization']
+        fields = ['specialty'] 
 
 class DailyTaskForm(forms.ModelForm):
     class Meta:

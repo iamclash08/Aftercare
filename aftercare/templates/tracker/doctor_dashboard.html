@@ -1,10 +1,12 @@
 {% extends 'base.html' %}
 {% block content %}
 <h2>Doctor Dashboard</h2>
-<p>Welcome Dr. {{ profile.user.username }}</p>
-<ul>
-{% for p in patients %}
-  <li>{{ p.user.username }} - {{ p.surgery_type }}</li>
-{% endfor %}
+<p><strong>User:</strong> {{ profile.user.username }}</p>
+
+<h4>Patients</h4>
+<ul class="list-group">
+    {% for patient in patients %}
+        <li class="list-group-item">{{ patient.user.username }} - {{ patient.age }} years</li>
+    {% endfor %}
 </ul>
 {% endblock %}

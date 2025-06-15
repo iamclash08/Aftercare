@@ -125,5 +125,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = 'tracker.CustomUser'
 
 LOGIN_URL = 'login'  # or '/accounts/login/' depending on your URL config
-LOGIN_REDIRECT_URL = 'patient_dashboard'  # or your homepage after login
-LOGOUT_REDIRECT_URL = '/'
+LOGIN_REDIRECT_URL = 'home'  # or your homepage after login
+
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+DEFAULT_FROM_EMAIL = 'from@example.com'
